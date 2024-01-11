@@ -1,10 +1,14 @@
+body{
+    font-family: monospace;
+}
 span{
-    font-size: 32px;
+    font-size: 2rem;
+    height: 2rem
 }
 
-#blinking-cursor{
-    width: 2px;
+#blinking-cursor {
+    width: .1rem;
     position: absolute;
-    height: 1rem;
+    height: 2rem;
     background-color: black;
 }
