@@ -1,0 +1,10 @@
+span{
+    font-size: 32px;
+}
+
+#blinking-cursor{
+    width: 2px;
+    position: absolute;
+    height: 1rem;
+    background-color: black;
+}
