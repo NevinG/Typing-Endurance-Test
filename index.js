@@ -11,10 +11,11 @@ let blinkInterval = undefined;
 let timeElapsed = 0;
 let charsTyped = 0;
 let firstCharisXCharTyped = 0;
+let firstCharisXCharTypedLast = 0;
 let wpmInterval = undefined;
 const charWidth = getCharWidth();
 const wpmText = document.getElementById("wpm-text");
-let goalSpeed = 50; //wpm to type in
+let goalSpeed = 100; //wpm to type in
 let testReady = true;
 let testOngoing = false;
 
@@ -50,7 +51,7 @@ document.addEventListener("keypress", (e) => {
 
         //check if line is complete
         if(currentTextLetter == currentTextLine.length){
-            firstCharisXCharTyped += currentTextLine.length;
+            
             currentTextLetter = 0;
             lastTextLine = currentTextLine;
             currentTextLine = nextTextLine;
@@ -58,6 +59,8 @@ document.addEventListener("keypress", (e) => {
 
             typingAreaChild.className = "test-animation";
             addTextToDOM(1);
+            firstCharisXCharTypedLast = firstCharisXCharTyped;
+            firstCharisXCharTyped += currentTextLine.length;
         }
     }
 });
@@ -96,20 +99,14 @@ function addTextToDOM(stage){
         line1text = currentTextLine;
         line2text = nextTextLine;
         line3text = "";
-        typingAreaChild.insertBefore(topLine, typingAreaChild.children[0]);
-        typingAreaChild.insertBefore(middleLine, typingAreaChild.children[1]);
     }else if(stage == 1){
         line1text = lastTextLine;
         line2text = currentTextLine;
         line3text = nextTextLine;
-        typingAreaChild.insertBefore(topLine, typingAreaChild.children[0]);
-        typingAreaChild.insertBefore(middleLine, typingAreaChild.children[1]);
     }else if(stage == 2){
-        line1text = nextTextLine;
-        line2text = currentTextLine;
+        line1text = currentTextLine;
+        line2text = nextTextLine;
         line3text = "";
-        typingAreaChild.insertBefore(middleLine, typingAreaChild.children[0]);
-        typingAreaChild.insertBefore(topLine, typingAreaChild.children[1]);
     }
     
 
@@ -154,10 +151,15 @@ function addTextToDOM(stage){
         topLine.insertBefore(blinkingCursor, topLine.children[currentTextLetter]);
     }
     else if (stage == 1){
-        middleLine.insertBefore(blinkingCursor, middleLine.children[currentTextLetter ]);
+        middleLine.insertBefore(blinkingCursor, middleLine.children[currentTextLetter]);
     }
     else if(stage == 2){
-        middleLine.insertBefore(blinkingCursor, middleLine.children[currentTextLetter + 1]);
+        topLine.insertBefore(blinkingCursor, topLine.children[currentTextLetter]);
+    }
+
+    //red background for chaser
+    for(let i = 0; i < (goalSpeed / 12) * timeElapsed - firstCharisXCharTyped; i++){
+        topLine.children[i].style.backgroundColor = "red";  
     }
 }
 
@@ -188,6 +190,22 @@ function updateWPM(){
 
     if(wpm < goalSpeed){
         endTest();
+    }
+
+    //red background for chaser
+    if(typingAreaChild.className == "test-animation"){
+        for(let i = 0; i < (goalSpeed / 12) * timeElapsed - firstCharisXCharTypedLast; i++){
+            try{topLine.children[i].style.backgroundColor = "red";}
+            catch(e){};
+        }
+    }
+    for(let i = 0; i < (goalSpeed / 12) * timeElapsed - firstCharisXCharTyped; i++){
+        if(typingAreaChild.className == "test-animation"){
+            topLine.children[i].style.backgroundColor = "red";
+            middleLine.children[i].style.backgroundColor = "red";
+        }else{
+            topLine.children[i].style.backgroundColor = "red";
+        }
     }
 }
 
