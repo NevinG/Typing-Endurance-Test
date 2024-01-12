@@ -12,3 +12,23 @@ span{
     height: 2rem;
     background-color: black;
 }
+
+#typing-area{
+    height: calc(4rem + 10px);
+    overflow: hidden;
+}
+
+@keyframes testAnimation{
+    from{
+        transform: translateY(0);
+    }
+    to{
+        transform: translateY(calc(-1 * (2rem + 5px)));
+    }
+}
+
+.test-animation{
+    animation-name: testAnimation;
+    animation-duration: 2s;
+    animation-timing-function: ease-in;
+}
